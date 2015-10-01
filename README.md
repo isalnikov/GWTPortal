@@ -10,7 +10,7 @@ GWT 2.7.0 spring  javaconfig
 3.  TODO  нужно понять как запускать и отлаживать код совместно :
     может ли gwt jetty  конфигурироваться через spring javaconfig и видеть все настройки;
     как проводить отладку клиента и сервера ?
-    mvn jetty:run  не видит скомпилированные ресурсы gwt -  требуется стртовать через mvn jetty:run-war но при этом <scanIntervalSeconds>0</scanIntervalSeconds>
+    mvn jetty:run  не видит скомпилированные ресурсы gwt -  требуется стартовать через mvn jetty:run-war но при этом <scanIntervalSeconds>0</scanIntervalSeconds>
 
 
 4.  RequestBuilder 
