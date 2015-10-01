@@ -17,3 +17,9 @@ GWT 2.7.0 spring  javaconfig
     http://stackoverflow.com/questions/15446161/gwt-request-builder-how-to-return-the-response-string
 
 5.  gwt:run gwt:dubug 
+
+
+TODO 
+
+6. отказаться от web.xml - перейти на javaconfig
+7. добавить GWT RPC совместно со spring javaconfig (отказаться от  RequestBuilder)
