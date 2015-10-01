@@ -23,3 +23,6 @@ TODO
 
 6. отказаться от web.xml - перейти на javaconfig
 7. добавить GWT RPC совместно со spring javaconfig (отказаться от  RequestBuilder)
+
+
+8. permutations http://docs-devel.sencha.com/gxt/3.x/gwt/Permutations.html
