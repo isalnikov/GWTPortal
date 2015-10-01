@@ -12,4 +12,19 @@
                 <goal>jetty:run</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-Run war</actionName>
+            <displayName>Run war</displayName>
+            <goals>
+                <goal>jetty:stop</goal>
+                <goal>jetty:run-war</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-GWT run</actionName>
+            <displayName>GWT run</displayName>
+            <goals>
+                <goal>gwt:run</goal>
+            </goals>
+        </action>
     </actions>

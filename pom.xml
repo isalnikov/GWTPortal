@@ -32,8 +32,18 @@
         <gwtVersion>2.7.0</gwtVersion>
     </properties>
     
+    
+    
+    <repositories>
+        <repository>
+            <id>sencha-commercial-release</id>
+            <name>Sencha commercial releases</name>
+            <url>https://maven.sencha.com/repo/commercial-release/</url>
+        </repository>
+    </repositories>
+    
     <dependencies>
-       <!-- Srping core -->
+        <!-- Srping core -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -86,10 +96,77 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <!--  GWT deps (from central repo) -->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>${gwtVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwtVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-codeserver</artifactId>
+            <version>${gwtVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <version>${gwtVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- GXT -->
+        <dependency>
+            <groupId>com.sencha.gxt</groupId>
+            <artifactId>gxt</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sencha.gxt</groupId>
+            <artifactId>gxt-chart</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwtVersion}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test</goal>
+                            <!--<goal>generateAsync</goal>-->
+                            <!--<goal>i18n</goal>-->
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--<outputDirectory>outputDirectory</outputDirectory>-->
+                    <!--<sourceLevel>1.7</sourceLevel>-->
+                    <!--<noserver>true</noserver>-->
+                    <!--<port>8888</port>-->
+                    <logLevel>INFO</logLevel>
+                    <style>OBF</style>
+                    <localWorkers>4</localWorkers>
+                    <extraJvmArgs>-Xms512M -Xmx512M</extraJvmArgs>
+                    <runTarget>/</runTarget>
+                    <hostedWebapp>${webappDirectory}</hostedWebapp>
+                    <i18nmessagesbundle>ru.portal.gwt.gwtportal.client.Messages</i18nmessagesbundle>
+                </configuration>
+            </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

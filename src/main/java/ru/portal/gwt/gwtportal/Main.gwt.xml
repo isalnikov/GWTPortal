@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module rename-to="application">
+      <inherits name="com.google.gwt.user.User"/>
+      <inherits name="com.google.gwt.http.HTTP"/>
+      <inherits name="com.sencha.gxt.ui.GXT" />
+      <entry-point class="ru.portal.gwt.gwtportal.client.MainEntryPoint"/>
+      <set-property name="compiler.stackMode" value="strip" />
+</module>
