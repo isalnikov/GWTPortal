@@ -1,0 +1,2 @@
+# GWTPortal
+GWT spring  javaconfig
