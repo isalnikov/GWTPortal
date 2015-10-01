@@ -1,8 +1,3 @@
-<%-- 
-    Document   : index
-    Created on : Sep 29, 2015, 11:42:27 AM
-    Author     : Igor Salnikov  <igor.salnikov@stoloto.ru>
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
