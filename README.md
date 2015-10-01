@@ -1,2 +1,2 @@
 # GWTPortal
-GWT spring  javaconfig
+GWT 2.7.0 spring  javaconfig
