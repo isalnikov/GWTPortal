@@ -27,4 +27,11 @@
                 <goal>gwt:run</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-GWT debug</actionName>
+            <displayName>GWT debug</displayName>
+            <goals>
+                <goal>gwt:debug</goal>
+            </goals>
+        </action>
     </actions>

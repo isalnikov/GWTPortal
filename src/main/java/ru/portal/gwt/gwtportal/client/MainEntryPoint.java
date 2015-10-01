@@ -57,16 +57,25 @@ public class MainEntryPoint implements EntryPoint {
                     builder.sendRequest(null, new RequestCallback() {
 
                         @Override
-                        public void onResponseReceived(Request request, Response response) {
-                            simple.add(new Label(response.getText()));
-                            simple.show();
-                        }
-
-                        @Override
                         public void onError(Request request, Throwable exception) {
                             simple.add(new Label(exception.getLocalizedMessage()));
                             simple.show();
                         }
+                        
+                        @Override
+                        public void onResponseReceived(Request request, Response response) {
+                            
+                            if (200 == response.getStatusCode()){
+                              simple.add(new Label(response.getText()));
+                              simple.show();
+                            } else {
+                               simple.add(new Label(response.getStatusText() +":"+ response.getStatusCode() ));
+                              simple.show(); 
+                            }
+                            
+                        }
+
+            
                     });
 
                 } catch (RequestException e) {
