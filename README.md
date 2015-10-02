@@ -26,3 +26,8 @@ TODO
 
 
 8. permutations http://docs-devel.sencha.com/gxt/3.x/gwt/Permutations.html
+
+9. GWT XML module configuration http://docs-devel.sencha.com/gxt/3.x/getting_started/Getting_Started.html
+
+
+10. spring xml + annotation javaconfig http://www.robinhowlett.com/blog/2013/02/13/spring-app-migration-from-xml-to-java-based-config/

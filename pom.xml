@@ -155,7 +155,7 @@
                 <configuration>
                     <!--<outputDirectory>outputDirectory</outputDirectory>-->
                     <!--<sourceLevel>1.7</sourceLevel>-->
-                    <!--<noserver>true</noserver>-->
+                    <noserver>true</noserver>
                     <!--<port>8888</port>-->
                     <logLevel>INFO</logLevel>
                     <style>OBF</style>
@@ -202,6 +202,7 @@
                     -->
                     <!--<war>${basedir}/target/****-1.0-SNAPSHOT.war</war>-->
                     <!--<scanIntervalSeconds>10</scanIntervalSeconds>-->
+                    <webAppSourceDirectory>${project.build.directory}/${project.build.finalName}</webAppSourceDirectory>
                     <contextPath>/</contextPath>
                     <stopPort>12456</stopPort>
                     <stopKey>djisjdksjk</stopKey>
