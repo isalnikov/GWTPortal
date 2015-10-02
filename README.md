@@ -1,6 +1,15 @@
 # GWTPortal
 GWT 2.7.0 spring  javaconfig
 
+UPDATE 02/10/2015
+DEBUG mode 
+
+1) add to pom.xml jetty-maven-plugin webAppSourceDirectory - ${project.build.directory}/${project.build.finalName}
+2) mvn jetty:stop jetty:run-exploded
+3) add to pom.xml gwt-maven-plugin noserver true
+4) mvn gwt:run 
+
+
 1.  Добавил все настройку на spring java config
     http://habrahabr.ru/post/226791/
 

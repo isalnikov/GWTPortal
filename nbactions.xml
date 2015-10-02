@@ -9,7 +9,7 @@
             </packagings>
             <goals>
                 <goal>jetty:stop</goal>
-                <goal>jetty:run</goal>
+                <goal>jetty:run-exploded</goal>
             </goals>
         </action>
         <action>
@@ -28,13 +28,6 @@
             </goals>
         </action>
         <action>
-            <actionName>CUSTOM-GWT debug</actionName>
-            <displayName>GWT debug</displayName>
-            <goals>
-                <goal>gwt:debug</goal>
-            </goals>
-        </action>
-        <action>
             <actionName>CUSTOM-Run exploded</actionName>
             <displayName>Run exploded</displayName>
             <goals>
@@ -46,5 +39,6 @@
                 <jpda.listen>maven</jpda.listen>
             </properties>
         </action>
+        
         
     </actions>
