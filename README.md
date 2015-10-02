@@ -47,3 +47,5 @@ TODO
 11. https://gwt.googlesource.com/gwt/+/2.7.0/samples/json?autodive=0%2F%2F/
 
 12. http://www.jworks.nl/2012/08/13/getting-started-with-maven-gxt-3-and-gwt-2-5/
+
+13. example https://github.com/steinsag/gwt-maven-example
