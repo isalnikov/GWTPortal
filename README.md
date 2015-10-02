@@ -5,8 +5,11 @@ UPDATE 02/10/2015
 DEBUG mode 
 
 1) add to pom.xml jetty-maven-plugin webAppSourceDirectory - ${project.build.directory}/${project.build.finalName}
+
 2) mvn jetty:stop jetty:run-exploded
+
 3) add to pom.xml gwt-maven-plugin noserver true
+
 4) mvn gwt:run 
 
 
