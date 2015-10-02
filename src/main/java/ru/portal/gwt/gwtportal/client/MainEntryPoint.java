@@ -2,6 +2,8 @@ package ru.portal.gwt.gwtportal.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -89,7 +91,12 @@ public class MainEntryPoint implements EntryPoint {
 
         RootPanel.get().add(button);
         RootPanel.get().add(random);
-
+        
     }
 
+    
+    public static <T extends JavaScriptObject> T parseJson(String jsonStr) {
+        return JsonUtils.safeEval(jsonStr);
+    }
+    
 }

@@ -34,6 +34,10 @@
                 <goal>jetty:stop</goal>
                 <goal>jetty:run-exploded</goal>
             </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Run exploded dedug</actionName>
+            <displayName>Run exploded dedug</displayName>
             <properties>
                 <netbeans.deploy.debugmode>true</netbeans.deploy.debugmode>
                 <jpda.listen>maven</jpda.listen>

@@ -43,3 +43,7 @@ TODO
 
 
 10. spring xml + annotation javaconfig http://www.robinhowlett.com/blog/2013/02/13/spring-app-migration-from-xml-to-java-based-config/
+
+11. https://gwt.googlesource.com/gwt/+/2.7.0/samples/json?autodive=0%2F%2F/
+
+12. http://www.jworks.nl/2012/08/13/getting-started-with-maven-gxt-3-and-gwt-2-5/
