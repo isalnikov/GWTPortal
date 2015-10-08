@@ -6,6 +6,15 @@
         </session-timeout>
     </session-config>
     
+<!--Loads Spring Security config file--> 
+<!--  
+   <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>ru.portal.config.AppConfig</param-value>
+    </context-param>
+-->
+  
+    
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
         <location>/WEB-INF/jsp/error.jsp</location>

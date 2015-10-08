@@ -49,3 +49,7 @@ TODO
 12. http://www.jworks.nl/2012/08/13/getting-started-with-maven-gxt-3-and-gwt-2-5/
 
 13. example https://github.com/steinsag/gwt-maven-example
+
+14. CRUD https://github.com/poseidonjm/basic-crud
+
+15. http://vivagwt.blogspot.in/2012/06/sencha-gxt3-requestfactory-guice-jpa.html
