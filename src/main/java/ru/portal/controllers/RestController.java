@@ -5,9 +5,13 @@
  */
 package ru.portal.controllers;
 
+import com.google.gson.Gson;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.metamodel.EntityType;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.async.DeferredResult;
+import ru.portal.entity.User;
 import ru.portal.interfaces.PortalTable;
 import ru.portal.services.TableService;
 import ru.portal.services.UserService;
@@ -66,7 +71,7 @@ public class RestController {
 
     }
 /**
- *  Возвращаем все таблицы у которых есть аннотация PortalTable
+ * Возвращаем все таблицы у которых есть аннотация PortalTable
  * @param isTable
  * @param id
  * @return
@@ -89,6 +94,23 @@ public class RestController {
         
       
     }
+    
+    
+    
+        @RequestMapping(
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE},
+            value = {"/grid"})
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ResponseEntity<String> grid() throws JSONException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-type", "application/json;charset=UTF-8");
+        
+        return new ResponseEntity<>(generateGridJson(), headers, HttpStatus.OK);
+        
+      
+    }
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<String> handelExceptions(Exception e) {
@@ -96,6 +118,22 @@ public class RestController {
         return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
     
+    private String generateGridJson() throws JSONException {
+        JSONObject root = new JSONObject();
+        JSONArray records = new JSONArray();
+        
+        root.put("records", records);
+
+            List<User> list = userService.findAll();
+        for (User user : list) {
+              JSONObject tableObject = new JSONObject();
+                tableObject.put("id", user.getId());
+                tableObject.put("login", user.getLogin());
+                  records.put(tableObject);
+        }
+            
+        return root.toString();
+    }
     
      private String generateTreeJson(Boolean isTable, String id) throws JSONException {
         JSONObject root = new JSONObject();

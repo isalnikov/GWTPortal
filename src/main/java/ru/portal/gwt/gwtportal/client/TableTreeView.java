@@ -4,6 +4,8 @@ import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.text.shared.SimpleSafeHtmlRenderer;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -11,6 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanFactory;
 import com.sencha.gxt.cell.core.client.SimpleSafeHtmlCell;
+import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.client.loader.HttpProxy;
@@ -24,6 +27,7 @@ import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.CheckChangeEvent;
+import com.sencha.gxt.widget.core.client.event.RefreshEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
@@ -54,7 +58,7 @@ public class TableTreeView implements IsWidget {
         String getId();
 
         String getName();
-        
+
         boolean isTable();
     }
 
@@ -79,6 +83,8 @@ public class TableTreeView implements IsWidget {
     }
 
     private VerticalLayoutContainer panel;
+    
+    private Tree<Record, String> tree;
 
     @Override
     public Widget asWidget() {
@@ -103,7 +109,7 @@ public class TableTreeView implements IsWidget {
             TreeStore<Record> store = new TreeStore<>(new RecordKeyProvider());
             loader.addLoadHandler(new ChildTreeStoreBinding<>(store));
 
-            final Tree<Record, String> tree = new Tree<>(store, new ValueProvider<Record, String>() {
+             tree = new Tree<>(store, new ValueProvider<Record, String>() {
                 @Override
                 public String getValue(Record object) {
                     return object.getName();
@@ -143,11 +149,15 @@ public class TableTreeView implements IsWidget {
                     super.onBrowserEvent(context, parent, value, event, valueUpdater);
                     if ("touchend".equals(event.getType()) || "click".equals(event.getType())) {
                         Info.display("Selected", "You selected \"" + value + "\"!");
+
                     }
                 }
             };
-            
+
             tree.setCell(cell);
+
+            tree.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
+
 
             panel = new VerticalLayoutContainer();
             panel.add(buttonBar, new VerticalLayoutData(1, -1));
@@ -156,6 +166,10 @@ public class TableTreeView implements IsWidget {
         }
 
         return panel;
+    }
+    
+    public void addSelectionHandler(SelectionHandler handler){
+       tree.getSelectionModel().addSelectionHandler(handler);
     }
 
 }

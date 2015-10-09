@@ -5,6 +5,8 @@
  */
 package ru.portal.gwt.gwtportal.client;
 
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -19,6 +21,7 @@ import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuBar;
 import com.sencha.gxt.widget.core.client.menu.MenuBarItem;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
+import ru.portal.gwt.gwtportal.client.TableTreeView.Record;
 
 /**
  * Главная форма панели администратора
@@ -112,6 +115,8 @@ public class AdminForm implements IsWidget {
             container.setCenterWidget(center, centerData);
             //container.setEastWidget(east, eastData);
             container.setSouthWidget(south, southData);
+            
+           addSelectionHandlers();
 
         }
 
@@ -126,4 +131,17 @@ public class AdminForm implements IsWidget {
         return tableGridView.asWidget();
     }
 
+    
+    private void addSelectionHandlers(){
+        tableTreeView.addSelectionHandler(new SelectionHandler<Record>() {
+
+            @Override
+            public void onSelection(SelectionEvent<Record>  event) {
+                  Record select = event.getSelectedItem();
+                   String id = select.getId();
+                   tableGridView.getListLoader().load();
+            }
+        });
+        
+    }
 }

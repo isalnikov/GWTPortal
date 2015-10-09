@@ -22,11 +22,14 @@ import com.sencha.gxt.data.shared.loader.LoadResultListStoreBinding;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutPack;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.RefreshEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.info.Info;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,53 +48,50 @@ public class TableGridView implements IsWidget {
         AutoBean<ListLoadConfig> loadConfig();
     }
 
-    public interface Email {
+    public interface TableField {
 
-        String getName();
+        String getId();
+        
+        String getLogin();
+        
+        //String[] getFieldNames();
+        
+        //String[] getFieldValues();
 
-        String getEmail();
 
-        String getPhone();
-
-        String getState();
-
-        String getZip();
     }
 
     
-    public  interface RecordResult extends AbstractResult<Email>{
+    public  interface RecordResult extends AbstractResult<TableField>{
        
     }
 
-    class DataRecordJsonReader extends JsonReader<ListLoadResult<Email>, RecordResult> {
+    class DataRecordJsonReader extends JsonReader<ListLoadResult<TableField>, RecordResult> {
 
         public DataRecordJsonReader(AutoBeanFactory factory, Class<RecordResult> rootBeanType) {
             super(factory, rootBeanType);
         }
 
         @Override
-        protected ListLoadResult<Email> createReturnData(Object loadConfig, RecordResult incomingData) {
+        protected ListLoadResult<TableField> createReturnData(Object loadConfig, RecordResult incomingData) {
             return new ListLoadResultBean<>(incomingData.getRecords());
         }
     }
 
-    interface EmailProperties extends PropertyAccess<Email> {
+    interface TableFieldProperties extends PropertyAccess<TableField> {
+        @Path("id")
+        ModelKeyProvider<TableField> key();
 
-        @Path("name")
-        ModelKeyProvider<Email> key();
+        ValueProvider<TableField, String> id();
+        
+        ValueProvider<TableField, String> login();
 
-        ValueProvider<Email, String> name();
-
-        ValueProvider<Email, String> email();
-
-        ValueProvider<Email, String> phone();
-
-        ValueProvider<Email, String> state();
-
-        ValueProvider<Email, String> zip();
+        //ValueProvider<TableField, String[]> fieldNames();
     }
 
-    private FramedPanel panel;
+    private VerticalLayoutContainer panel;
+    
+    private ListLoader<ListLoadConfig, ListLoadResult<TableField>> loader;
 
     @Override
     public Widget asWidget() {
@@ -106,54 +106,61 @@ public class TableGridView implements IsWidget {
             RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, path);
             HttpProxy<ListLoadConfig> proxy = new HttpProxy<>(builder);
 
-            final ListLoader<ListLoadConfig, ListLoadResult<Email>> loader = new ListLoader<>(proxy, jsonReader);
+            loader = new ListLoader<>(proxy, jsonReader);
             loader.useLoadConfig(factory.create(ListLoadConfig.class).as());
 
-            EmailProperties properties = GWT.create(EmailProperties.class);
+            TableFieldProperties properties = GWT.create(TableFieldProperties.class);
 
-            ListStore<Email> store = new ListStore<>(properties.key());
-            loader.addLoadHandler(new LoadResultListStoreBinding<ListLoadConfig, Email, ListLoadResult<Email>>(store));
+            ListStore<TableField> store = new ListStore<>(properties.key());
+            loader.addLoadHandler(new LoadResultListStoreBinding<ListLoadConfig, TableField, ListLoadResult<TableField>>(store));
 
-            ColumnConfig<Email, String> senderColumn = new ColumnConfig<>(properties.name(), 100, "Sender");
-            ColumnConfig<Email, String> emailColumn = new ColumnConfig<>(properties.email(), 165, "Email");
-            ColumnConfig<Email, String> phoneColumn = new ColumnConfig<>(properties.phone(), 100, "Phone");
-            ColumnConfig<Email, String> stateColumn = new ColumnConfig<>(properties.state(), 50, "State");
-            ColumnConfig<Email, String> zipColumn = new ColumnConfig<>(properties.zip(), 65, "Zip Code");
+            ColumnConfig<TableField, String> senderColumn = new ColumnConfig<>(properties.id(), 100, "id");
+            ColumnConfig<TableField, String> loginColumn = new ColumnConfig<>(properties.login(), 165, "login");
+            
+         
+                
+            
+//            ColumnConfig<TableField, String> phoneColumn = new ColumnConfig<>(properties.phone(), 100, "Phone");
+  //          ColumnConfig<TableField, String> stateColumn = new ColumnConfig<>(properties.state(), 50, "State");
+//            ColumnConfig<TableField, String> zipColumn = new ColumnConfig<>(properties.zip(), 65, "Zip Code");
 
-            List<ColumnConfig<Email, ?>> l = new ArrayList<>();
+            List<ColumnConfig<TableField, ?>> l = new ArrayList<>();
             l.add(senderColumn);
-            l.add(emailColumn);
-            l.add(phoneColumn);
-            l.add(stateColumn);
-            l.add(zipColumn);
+            l.add(loginColumn);
+          //  l.add(phoneColumn);
+          //  l.add(stateColumn);
+          //  l.add(zipColumn);
 
-            ColumnModel<Email> cm = new ColumnModel<>(l);
+            ColumnModel<TableField> cm = new ColumnModel<>(l);
 
-            Grid<Email> grid = new Grid<>(store, cm);
+            Grid<TableField> grid = new Grid<>(store, cm);
             grid.getView().setForceFit(true);
             grid.setLoader(loader);
             grid.setLoadMask(true);
             grid.setBorders(true);
             grid.getView().setEmptyText("Please hit the load button.");
 
-            panel = new FramedPanel();
-            panel = new FramedPanel();
-            panel.setHeaderVisible(false);
-            panel.setWidget(grid);
-            panel.setHeight("100%");
+            panel = new VerticalLayoutContainer();
+            panel.add(grid, new VerticalLayoutContainer.VerticalLayoutData(1, 1));
+            
+            
             //panel.setPixelSize(575, 350);
             //panel.addStyleName("margin-10");
-            panel.setButtonAlign(BoxLayoutPack.CENTER);
-            panel.addButton(new TextButton("Load Json", new SelectHandler() {
-                @Override
-                public void onSelect(SelectEvent event) {
-                    loader.load();
-                }
-            }));
+           // panel.setButtonAlign(BoxLayoutPack.CENTER);
+            //panel.addButton(new TextButton("Load Json", new SelectHandler() {
+            //    @Override
+            //    public void onSelect(SelectEvent event) {
+            //        loader.load();
+            //    }
+            //}));
 
         }
 
         return panel;
+    }
+    
+    public ListLoader getListLoader(){
+        return loader;
     }
 
 }
