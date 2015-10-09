@@ -53,3 +53,5 @@ TODO
 14. CRUD https://github.com/poseidonjm/basic-crud
 
 15. http://vivagwt.blogspot.in/2012/06/sencha-gxt3-requestfactory-guice-jpa.html
+
+16. http://www.mkyong.com/spring/spring-view-content-of-hsqldb-embedded-database/

@@ -3,7 +3,7 @@
 <module rename-to="application">
     
     <!--<stylesheet src="reset.css" />-->
-    
+     
     <inherits name="com.google.gwt.user.User"/>
     <inherits name="com.google.gwt.http.HTTP"/>
     <inherits name="com.sencha.gxt.ui.GXT" />

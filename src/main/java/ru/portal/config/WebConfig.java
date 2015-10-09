@@ -23,7 +23,9 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @ComponentScan({
     "ru.portal.config",
-    "ru.portal.controller"
+    "ru.portal.controllers",
+    "ru.portal.repositories",
+    "ru.portal.services"
     })
 public class WebConfig extends WebMvcConfigurerAdapter {
 
