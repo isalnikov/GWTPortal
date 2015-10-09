@@ -1,12 +1,17 @@
 package ru.portal.gwt.gwtportal.client;
 
-
+import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.text.shared.SimpleSafeHtmlRenderer;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanFactory;
+import com.sencha.gxt.cell.core.client.SimpleSafeHtmlCell;
+import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.client.loader.HttpProxy;
 import com.sencha.gxt.data.client.writer.UrlEncodingWriter;
@@ -18,13 +23,12 @@ import com.sencha.gxt.data.shared.loader.TreeLoader;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.CheckChangeEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import com.sencha.gxt.widget.core.client.tree.Tree;
 import java.util.List;
-
-
 
 /**
  * Список всех таблиц доступных для редактирования
@@ -37,9 +41,9 @@ public class TableTreeView implements IsWidget {
 
         AutoBean<RecordResult> items();
     }
-    
-    public  interface RecordResult extends AbstractResult<Record>{
-       
+
+    public interface RecordResult extends AbstractResult<Record> {
+
     }
 
     /**
@@ -50,11 +54,10 @@ public class TableTreeView implements IsWidget {
         String getId();
 
         String getName();
-
+        
         boolean isTable();
     }
 
- 
     private class RecordKeyProvider implements ModelKeyProvider<Record> {
 
         @Override
@@ -87,7 +90,7 @@ public class TableTreeView implements IsWidget {
             RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, GWT.getHostPageBaseURL() + "tables");
 
             HttpProxy<Record> jsonProxy = new HttpProxy<>(requestBuilder);
-            
+
             jsonProxy.setWriter(new UrlEncodingWriter<>(factory, Record.class));
 
             TreeLoader<Record> loader = new TreeLoader<Record>(jsonProxy, reader) {
@@ -132,6 +135,19 @@ public class TableTreeView implements IsWidget {
                     tree.collapseAll();
                 }
             }));
+
+            SimpleSafeHtmlCell<String> cell = new SimpleSafeHtmlCell<String>(SimpleSafeHtmlRenderer.getInstance(), "click", "touchend") {
+                @Override
+                public void onBrowserEvent(Context context, Element parent, String value, NativeEvent event,
+                        ValueUpdater<String> valueUpdater) {
+                    super.onBrowserEvent(context, parent, value, event, valueUpdater);
+                    if ("touchend".equals(event.getType()) || "click".equals(event.getType())) {
+                        Info.display("Selected", "You selected \"" + value + "\"!");
+                    }
+                }
+            };
+            
+            tree.setCell(cell);
 
             panel = new VerticalLayoutContainer();
             panel.add(buttonBar, new VerticalLayoutData(1, -1));

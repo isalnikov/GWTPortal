@@ -65,7 +65,13 @@ public class RestController {
         return deferredResult;
 
     }
-
+/**
+ *  Возвращаем все таблицы у которых есть аннотация PortalTable
+ * @param isTable
+ * @param id
+ * @return
+ * @throws JSONException 
+ */
     @RequestMapping(
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE},
@@ -91,7 +97,7 @@ public class RestController {
     }
     
     
-     private String generateTreeJson(Boolean isFolder, String id) throws JSONException {
+     private String generateTreeJson(Boolean isTable, String id) throws JSONException {
         JSONObject root = new JSONObject();
         JSONArray records = new JSONArray();
 
