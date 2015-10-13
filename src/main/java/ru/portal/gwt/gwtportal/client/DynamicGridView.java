@@ -55,7 +55,6 @@ public class DynamicGridView implements IsWidget{
     private DynamicGrid<Map<String,String>, ColumnModel<Map<String,String>>, RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>>> dynamicGridPanel;
     @Override
     public Widget asWidget() {
-        tableName = "Users"; //THIS COULD COME FROM USER INPUT ON UI
         simpleContainer = new SimpleContainer();
         simpleContainer.mask();
         //First get columns

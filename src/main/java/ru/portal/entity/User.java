@@ -57,6 +57,17 @@ public class User implements Serializable {
     )
     private Set<Role> roles = new HashSet<>();
 
+    public User() {
+    }
+
+    public User(String login, String password, boolean enabled) {
+        this.login = login;
+        this.password = password;
+        this.enabled = enabled;
+    }
+    
+    
+
     public Long getId() {
         return id;
     }

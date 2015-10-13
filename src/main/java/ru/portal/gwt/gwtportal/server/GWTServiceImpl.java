@@ -39,9 +39,7 @@ public class GWTServiceImpl implements GWTService {
     @Autowired
     private TableService tableService;
 
-    @Autowired
-    private UserService userService;
-
+ 
     @Override
     public String myMethod(String s) {
         return "Server says: " + s;
@@ -81,9 +79,9 @@ public class GWTServiceImpl implements GWTService {
         //Sort sort = new Sort(Sort.Direction.DESC, "login");
         int page = (config.getLimit() != 0 && config.getOffset() > 0) ? (config.getOffset() / config.getLimit()) : 0;
         Pageable pageable = new PageRequest(page, config.getLimit()); //TODO sort + page size + тут мощный сb 
-        Page<User> list = userService.findAll(pageable);
-        Map<String, String> map = new HashMap<>();
-        return new PagingLoadResultBean(list.getContent(), (int) list.getTotalElements(), config.getOffset());
+        Page<List<String>> result = tableService.findAll(tableOrViewName , pageable);
+        result.getContent();
+        return new PagingLoadResultBean(result.getContent(), (int) result.getTotalElements(), config.getOffset());
     }
 
 
