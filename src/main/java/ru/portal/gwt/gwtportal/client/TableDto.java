@@ -8,7 +8,7 @@ package ru.portal.gwt.gwtportal.client;
 
 /**
  *
- * @author Igor Salnikov <igor.salnikov@stoloto.ru>
+ * @author Igor Salnikov 
  */
 import java.util.List;
  
