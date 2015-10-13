@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.client.loader.RpcProxy;
+import com.sencha.gxt.data.shared.loader.ListLoader;
 import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 
@@ -42,22 +43,30 @@ import com.sencha.gxt.widget.core.client.grid.Grid;
  */
 public class DynamicGridView implements IsWidget{
     
-  // private final RPCServiceAsync service = GWT.create(RPCService.class);
+   private final GWTServiceAsync service = GWT.create(GWTService.class);
+   
+   
+   private String tableName ;
+   
+   private AsyncCallback<List<String>> callback;
+   
+   private SimpleContainer simpleContainer;
     
     private DynamicGrid<Map<String,String>, ColumnModel<Map<String,String>>, RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>>> dynamicGridPanel;
     @Override
     public Widget asWidget() {
-        final String TABLE_NAME = "YOUR_DB_TABLE_NAME"; //THIS COULD COME FROM USER INPUT ON UI
-        final SimpleContainer simpleContainer = new SimpleContainer();
-        simpleContainer.mask("Loading..");
+        tableName = "Users"; //THIS COULD COME FROM USER INPUT ON UI
+        simpleContainer = new SimpleContainer();
+        simpleContainer.mask();
         //First get columns
-        AsyncCallback<List<String>> callback = new AsyncCallback<List<String>>() {
+        
+        callback = new AsyncCallback<List<String>>() {
             @Override
             public void onSuccess(List<String> result) {
                 RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>> proxy = new RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>>() {
                     @Override
                     public void load(PagingLoadConfig loadConfig, AsyncCallback<PagingLoadResult<Map<String,String>>> callback) {
-                       // service.fetchTableOrViewData(loadConfig, TABLE_NAME, callback);
+                        service.fetchTableOrViewData(loadConfig, tableName, callback);
                     }
                 };
 
@@ -68,9 +77,9 @@ public class DynamicGridView implements IsWidget{
                     ColumnConfig<Map<String,String>,String> cc = new ColumnConfig<Map<String,String>, String>(new GenericMapValueProvider(column),150,column);
                     l.add(cc);
                 }
-                ColumnModel<Map<String,String>> cm = new ColumnModel<Map<String,String>>(l);
+                ColumnModel<Map<String,String>> columnModel = new ColumnModel<Map<String,String>>(l);
                 
-                dynamicGridPanel = new DynamicGrid<Map<String,String>, ColumnModel<Map<String,String>>, RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>>>(cm, proxy);
+                dynamicGridPanel = new DynamicGrid<Map<String,String>, ColumnModel<Map<String,String>>, RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>>>(columnModel, proxy);
                 SimpleContainer container = new SimpleContainer();
                 container.add(dynamicGridPanel.asWidget());
                 VerticalLayoutContainer layoutContainer = new VerticalLayoutContainer();
@@ -87,9 +96,19 @@ public class DynamicGridView implements IsWidget{
                 new AlertMessageBox("Error", "Error while loading grid."+caught.getMessage()).show();;
             }
         }; 
-       // service.fetchTableOrViewMetaData(TABLE_NAME, callback); 
+       
         return simpleContainer;
     }
 
+   
+    
+    
+    
+   public void refreshGrid(String tableName ,PagingLoadConfig loadConfig) {
+        this.tableName = tableName;
+        service.fetchTableOrViewMetaData(tableName, callback); 
+        this.dynamicGridPanel.refreshGrid(loadConfig);
+        
+    }
 
 }

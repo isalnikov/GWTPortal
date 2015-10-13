@@ -15,6 +15,8 @@ public class MainEntryPoint implements EntryPoint {
     public void onModuleLoad() {
 
         AdminForm adminForm = new AdminForm();
+        //DynamicGridView adminForm = new DynamicGridView();
+        
         Viewport viewport = new Viewport();
         viewport.add(adminForm.asWidget());
         RootPanel.get().add(viewport);

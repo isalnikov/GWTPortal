@@ -6,6 +6,7 @@
 package ru.portal.gwt.gwtportal.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -15,6 +16,7 @@ import com.sencha.gxt.core.client.GXT;
 import com.sencha.gxt.data.client.loader.RpcProxy;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
+import com.sencha.gxt.data.shared.loader.ListLoader;
 import com.sencha.gxt.data.shared.loader.LoadResultListStoreBinding;
 import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
@@ -57,9 +59,10 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
         ListStore<M> store = new ListStore<M>(new ModelKeyProvider<M>() {
             @Override
             public String getKey(M item) {
-               // if (item instanceof <YourCustomerClass>) {
-               //     return ((YourCustomerClass) item).getId();
-               // }
+                GWT.log(item.toString());
+//                if (item instanceof <YourCustomerClass>) {
+//                    return ((YourCustomerClass) item).getId();
+//                }
                 return null;
             }
         });
@@ -70,6 +73,7 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
         final PagingToolBar toolBar = new PagingToolBar(50);
         toolBar.getElement().getStyle().setProperty("borderBottom", "none");
         toolBar.bind(loader);
+        
         this.grid = new Grid<M>(store, columnModel) {
             @Override
             protected void onAfterFirstAttach() {
@@ -82,6 +86,7 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
                 });
             }
         };
+        
         this.grid.getView().setStripeRows(true);
         this.grid.getView().setColumnLines(true);
         this.grid.setBorders(false);
@@ -92,24 +97,21 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
 
         GridStateHandler<M> state = new GridStateHandler<M>(this.grid);
         state.loadState();
-        VerticalLayoutContainer con = new VerticalLayoutContainer();
-        con.setBorders(true);
-        con.add(this.grid, new VerticalLayoutData(1, 1));
-        con.add(toolBar, new VerticalLayoutData(1, -1));
-        return con;
+        
+        VerticalLayoutContainer container = new VerticalLayoutContainer();
+        container.setBorders(true);
+        container.add(this.grid, new VerticalLayoutData(1, 1));
+        container.add(toolBar, new VerticalLayoutData(1, -1));
+        return container;
     }
 
-    public void refreshGrid() {
-        this.loader.load();
+    public void refreshGrid(PagingLoadConfig loadConfig) {
+        this.loader.load(loadConfig);
     }
 
     public Grid<M> getGrid() {
         return this.grid;
     }
 
-  //  @Override
-  //  public void onModuleLoad() {
-  //      StateManager.get().setProvider(new CookieProvider("/", null, null, GXT.isSecure()));
-  //      RootPanel.get().add(asWidget());
-    
+   
 }

@@ -8,7 +8,7 @@ import ru.portal.entity.Role;
 import ru.portal.repositories.RoleRepository;
 
 @Transactional
-@Service("roleService")
+@Service
 public class RoleServiceImpl extends AbstractServiceImpl<Role, Long> implements RoleService {
 
     protected  final RoleRepository repository;

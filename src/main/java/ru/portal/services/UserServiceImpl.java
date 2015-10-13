@@ -14,7 +14,7 @@ import ru.portal.repositories.UserRepository;
 
 
 @Transactional
-@Service("userService")
+@Service
 public class UserServiceImpl extends AbstractServiceImpl<User, Long> implements UserService {
 
     

@@ -7,21 +7,16 @@ package ru.portal.services;
 
 import java.util.List;
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import ru.portal.entity.Role;
-import ru.portal.entity.User;
 
 /**
  *
@@ -30,20 +25,13 @@ import ru.portal.entity.User;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AppConfigTest.class)
 @WebAppConfiguration
-public class UserServiceImplTest {
+public class TableServiceImplTest {
 
-    @Resource
-    private EntityManagerFactory emf;
-
-    protected EntityManager em;
-
-    @Resource
-    private UserService userService;
     
     @Resource
-    private RoleService roleService;
+    private TableService tableService;
 
-    public UserServiceImplTest() {
+    public TableServiceImplTest() {
     }
 
     @BeforeClass
@@ -63,18 +51,12 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testFindAllUsers() {
-        List<User> users = userService.findAll();
-         //assertTrue(users.size() == 2);
-        
-        System.out.println(users);
+    public void testGetTableOrViewMetaData() {
+        System.out.println("getTableOrViewMetaData");
+        String tableOrViewName = "Users";
+        List<String> expResult = tableService.getTableOrViewMetaData(tableOrViewName);
+        //assertEquals(expResult.size(), 3);
+        System.out.println(expResult);
     }
-    @Test
-    public void testFindAllRoles() {
-        List<Role> roles = roleService.findAll();
-        System.out.println(roles);
-    }
-
-
 
 }

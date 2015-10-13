@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -29,11 +30,11 @@ import ru.portal.config.AdminTableHendlerBeanFactoryPostProcessor;
  */
 @Configuration
 @ComponentScan({
-    "ru.portal.controllers",
     "ru.portal.repositories",
     "ru.portal.services"})
 @EnableTransactionManagement
 @PropertySource(value = "classpath:local.properties", ignoreResourceNotFound = true)
+@EnableJpaRepositories(basePackages = {"ru.portal.repositories"})
 public class AppConfigTest {
 
     @Bean
@@ -96,6 +97,7 @@ public class AppConfigTest {
         properties.setProperty("hibernate.hbm2ddl.auto", "create");
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
+        properties.setProperty("hibernate.ejb.entitymanager_factory_name","portalPersistanceUnit");
         return properties;
     }
 

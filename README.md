@@ -55,3 +55,9 @@ TODO
 15. http://vivagwt.blogspot.in/2012/06/sencha-gxt3-requestfactory-guice-jpa.html
 
 16. http://www.mkyong.com/spring/spring-view-content-of-hsqldb-embedded-database/
+
+17. GSON http://habrahabr.ru/post/253266/
+
+18. GWT RPC + spring http://stackoverflow.com/questions/1225152/gwt-scaffolding/30838630#30838630
+              https://www.sencha.com/forum/showthread.php?90592-Paging-Grid-Serialization-with-BasePagingLoadConfig-object
+              https://github.com/krishnaraj/JettyGwtSpringSample

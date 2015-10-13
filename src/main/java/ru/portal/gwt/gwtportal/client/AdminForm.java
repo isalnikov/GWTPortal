@@ -5,6 +5,7 @@
  */
 package ru.portal.gwt.gwtportal.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.HTML;
@@ -21,7 +22,7 @@ import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuBar;
 import com.sencha.gxt.widget.core.client.menu.MenuBarItem;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
-import ru.portal.gwt.gwtportal.client.TableTreeView.Record;
+
 
 /**
  * Главная форма панели администратора
@@ -31,8 +32,8 @@ import ru.portal.gwt.gwtportal.client.TableTreeView.Record;
 public class AdminForm implements IsWidget {
 
     private BorderLayoutContainer container;
-    private TableTreeView tableTreeView;
-    private TableGridView tableGridView;
+    private DynamicTreeView tableTreeView;
+    private DynamicGridView tableGridView;
 
     public AdminForm() {
     }
@@ -41,8 +42,8 @@ public class AdminForm implements IsWidget {
     public Widget asWidget() {
         if (container == null) {
 
-            tableTreeView = new TableTreeView();
-            tableGridView = new TableGridView();
+            tableTreeView = new DynamicTreeView();
+            tableGridView = new DynamicGridView();
 
             container = new BorderLayoutContainer();
             container.setBorders(true);
@@ -133,13 +134,13 @@ public class AdminForm implements IsWidget {
 
     
     private void addSelectionHandlers(){
-        tableTreeView.addSelectionHandler(new SelectionHandler<Record>() {
+        tableTreeView.addSelectionHandler(new SelectionHandler<TableDto>() {
 
             @Override
-            public void onSelection(SelectionEvent<Record>  event) {
-                  Record select = event.getSelectedItem();
-                   String id = select.getId();
-                   tableGridView.getListLoader().load();
+            public void onSelection(SelectionEvent<TableDto>  event) {
+                   TableDto select = event.getSelectedItem();
+                   GWT.log(select.getClassName());
+                   tableGridView.refreshGrid(select.getClassName() , null);
             }
         });
         

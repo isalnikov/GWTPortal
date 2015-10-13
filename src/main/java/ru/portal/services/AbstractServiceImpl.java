@@ -20,6 +20,7 @@ public abstract class AbstractServiceImpl<T, ID extends Serializable> implements
     
     private final AbstractRepository<T , ID > repository;
     
+    
     protected AbstractServiceImpl(AbstractRepository<T , ID > repository){
         this.repository = repository;
         
