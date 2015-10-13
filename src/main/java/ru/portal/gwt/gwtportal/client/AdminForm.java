@@ -107,14 +107,14 @@ public class AdminForm implements IsWidget {
             //
             HTML htmlsouthr = new HTML("htmlsouthr");
             south.add(htmlsouthr);
-            HTML htmleast = new HTML("htmleast");
+            HTML htmleast = new HTML("TODO add editor row dynamic form");
             east.add(htmleast);
             //
 
             container.setNorthWidget(north, northData);
             container.setWestWidget(west, westData);
             container.setCenterWidget(center, centerData);
-            //container.setEastWidget(east, eastData);
+            container.setEastWidget(east, eastData);
             container.setSouthWidget(south, southData);
             
            addSelectionHandlers();
