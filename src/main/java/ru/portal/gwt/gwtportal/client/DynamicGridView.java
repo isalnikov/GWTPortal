@@ -72,7 +72,7 @@ public class DynamicGridView implements IsWidget{
 
                 /*Dynamic columns*/
                 List<ColumnConfig<Map<String,String>,?>> l = new ArrayList<ColumnConfig<Map<String,String>,?>>();
-                for(String column:result){
+                for(String column : result){
                     ColumnConfig<Map<String,String>,String> cc = new ColumnConfig<Map<String,String>, String>(new GenericMapValueProvider(column),150,column);
                     l.add(cc);
                 }

@@ -2,6 +2,7 @@
 package ru.portal.services;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.persistence.metamodel.EntityType;
 import org.springframework.data.domain.Page;
@@ -14,5 +15,5 @@ public interface TableService {
 
     public List<String> getTableOrViewMetaData(String tableOrViewName);
 
-    public  Page<List<String>> findAll(String tableOrViewName, Pageable pageable);
+    public  Page<Map<String, String>> findAll(String tableOrViewName, Pageable pageable);
 }

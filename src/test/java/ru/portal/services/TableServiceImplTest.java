@@ -7,6 +7,7 @@ package ru.portal.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.annotation.Resource;
 import javax.persistence.metamodel.EntityType;
@@ -94,12 +95,14 @@ public class TableServiceImplTest {
         String tableOrViewName = User.class.getCanonicalName();
         System.out.println(tableOrViewName);
         Pageable pageable = null;
-        Page<List<String>> result = tableService.findAll(tableOrViewName, pageable);
+        Page<Map<String, String>> result = tableService.findAll(tableOrViewName, pageable);
+        System.out.println(result);
         System.out.println("findAll");
         tableOrViewName = Role.class.getCanonicalName();
         System.out.println(tableOrViewName);
         pageable = new PageRequest(2, 10);
-        tableService.findAll(tableOrViewName, pageable);
+        result = tableService.findAll(tableOrViewName, pageable);
+        System.out.println(result);
     }
 
 }

@@ -79,7 +79,7 @@ public class GWTServiceImpl implements GWTService {
         //Sort sort = new Sort(Sort.Direction.DESC, "login");
         int page = (config.getLimit() != 0 && config.getOffset() > 0) ? (config.getOffset() / config.getLimit()) : 0;
         Pageable pageable = new PageRequest(page, config.getLimit()); //TODO sort + page size + тут мощный сb 
-        Page<List<String>> result = tableService.findAll(tableOrViewName , pageable);
+        Page<Map<String, String>> result = tableService.findAll(tableOrViewName , pageable);
         result.getContent();
         return new PagingLoadResultBean(result.getContent(), (int) result.getTotalElements(), config.getOffset());
     }

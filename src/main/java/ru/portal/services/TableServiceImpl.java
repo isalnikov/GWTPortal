@@ -7,8 +7,10 @@ package ru.portal.services;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -74,9 +76,9 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public Page<List<String>> findAll(String tableOrViewName, Pageable pageable) {
+    public Page<Map<String, String>> findAll(String tableOrViewName, Pageable pageable) {
        
-        List<List<String>> result = new ArrayList<>();
+        List<Map<String, String>> result = new ArrayList<>();
         
         EntityType<?> type = null;
         Set<EntityType<?>> set = em.getEntityManagerFactory().getMetamodel().getEntities();
@@ -121,14 +123,15 @@ public class TableServiceImpl implements TableService {
            
             
             for (Object object : all) {
-                ArrayList<String> res = new ArrayList<>(columns.size());
+                
+                HashMap<String, String> res = new HashMap<>(columns.size());
                 Class<? extends Object> clazz = object.getClass();
                 for (String fieldName : columns) {
                     try {
                         Field field = clazz.getDeclaredField(fieldName);
                         field.setAccessible(true);
                         Object fieldValue =  field.get(object);
-                        res.add(fieldValue.toString());
+                        res.put(fieldName, fieldValue.toString());
                         //TODO cast data integer long etc
                     } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
                         Logger.getLogger(TableServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -138,7 +141,7 @@ public class TableServiceImpl implements TableService {
             }
         }
         
-        PageImpl<List<String>> list = new PageImpl<>(result, pageable, totalRows);
+        PageImpl<Map<String, String>> list = new PageImpl<>(result, pageable, totalRows);
         return list;
     }
 
