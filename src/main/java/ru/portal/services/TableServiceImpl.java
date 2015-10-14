@@ -76,9 +76,9 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public Page<Map<String, String>> findAll(String tableOrViewName, Pageable pageable) {
+    public Page<HashMap<String, String>> findAll(String tableOrViewName, Pageable pageable) {
        
-        List<Map<String, String>> result = new ArrayList<>();
+        List<HashMap<String, String>> result = new ArrayList<>();
         
         EntityType<?> type = null;
         Set<EntityType<?>> set = em.getEntityManagerFactory().getMetamodel().getEntities();
@@ -141,7 +141,7 @@ public class TableServiceImpl implements TableService {
             }
         }
         
-        PageImpl<Map<String, String>> list = new PageImpl<>(result, pageable, totalRows);
+        PageImpl<HashMap<String, String>> list = new PageImpl<>(result, pageable, totalRows);
         return list;
     }
 

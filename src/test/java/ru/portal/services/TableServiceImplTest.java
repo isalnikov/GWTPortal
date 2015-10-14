@@ -6,6 +6,7 @@
 package ru.portal.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -95,7 +96,7 @@ public class TableServiceImplTest {
         String tableOrViewName = User.class.getCanonicalName();
         System.out.println(tableOrViewName);
         Pageable pageable = null;
-        Page<Map<String, String>> result = tableService.findAll(tableOrViewName, pageable);
+        Page<HashMap<String, String>> result = tableService.findAll(tableOrViewName, pageable);
         System.out.println(result);
         System.out.println("findAll");
         tableOrViewName = Role.class.getCanonicalName();

@@ -63,3 +63,6 @@ TODO
               https://github.com/krishnaraj/JettyGwtSpringSample
 
 19. jpa-pagination http://www.baeldung.com/jpa-pagination
+
+
+20. http://geekbybit.blogspot.ru/2013/03/diy-working-with-gwt-codeserver-tomcat.html

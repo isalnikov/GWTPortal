@@ -64,8 +64,27 @@ public class DynamicGridView implements IsWidget{
             public void onSuccess(List<String> result) {
                 RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>> proxy = new RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>>() {
                     @Override
-                    public void load(PagingLoadConfig loadConfig, AsyncCallback<PagingLoadResult<Map<String,String>>> callback) {
+                    public void load(PagingLoadConfig loadConfig,final AsyncCallback<PagingLoadResult<Map<String,String>>> callback) {
+                        
+                      AsyncCallback<PagingLoadResult<Map<String,String>>> asyncCallback = new AsyncCallback<PagingLoadResult<Map<String, String>>>() {
+
+                          @Override
+                          public void onFailure(Throwable caught) {
+                             callback.onFailure(caught);
+                          }
+
+                          @Override
+                          public void onSuccess(PagingLoadResult<Map<String, String>> result) {
+                             //callback.onSuccess(result);
+                              GWT.log(result.toString());
+                            // dynamicGridPanel.refreshDynamicGrid();
+                          }
+                      };
+                      
+               
                         service.fetchTableOrViewData(loadConfig, tableName, callback);
+                        
+                       
                     }
                 };
 
@@ -103,10 +122,10 @@ public class DynamicGridView implements IsWidget{
     
     
     
-   public void refreshGrid(String tableName ,PagingLoadConfig loadConfig) {
+   public void refreshGrid(String tableName) {
         this.tableName = tableName;
         service.fetchTableOrViewMetaData(tableName, callback); 
-        this.dynamicGridPanel.refreshGrid(loadConfig);
+        
         
     }
 

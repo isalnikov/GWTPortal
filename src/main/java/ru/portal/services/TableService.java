@@ -1,6 +1,7 @@
 
 package ru.portal.services;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,5 +16,5 @@ public interface TableService {
 
     public List<String> getTableOrViewMetaData(String tableOrViewName);
 
-    public  Page<Map<String, String>> findAll(String tableOrViewName, Pageable pageable);
+    public  Page<HashMap<String, String>> findAll(String tableOrViewName, Pageable pageable);
 }

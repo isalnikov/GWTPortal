@@ -60,10 +60,23 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
             @Override
             public String getKey(M item) {
                 GWT.log(item.toString());
+                String id = null;
+                if (item != null) {
+                    // {rolename=ROLE_USER, id=2}
+                    String[] arr = item.toString().replaceAll("\\{", "").replaceAll("\\}", "").split(",");
+                    for (String string : arr) {
+                        String[] sarr = string.split("=");
+                        if (sarr[0].replaceAll(" ", "").equals("id")) {
+                            id = sarr[1];
+                            break;
+                        }
+                    }
+                }
 //                if (item instanceof <YourCustomerClass>) {
 //                    return ((YourCustomerClass) item).getId();
 //                }
-                return null;
+                GWT.log(id);
+                return id;
             }
         });
         this.loader = new PagingLoader<PagingLoadConfig, PagingLoadResult<M>>(proxy);
@@ -73,7 +86,7 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
         final PagingToolBar toolBar = new PagingToolBar(50);
         toolBar.getElement().getStyle().setProperty("borderBottom", "none");
         toolBar.bind(loader);
-        
+
         this.grid = new Grid<M>(store, columnModel) {
             @Override
             protected void onAfterFirstAttach() {
@@ -86,7 +99,7 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
                 });
             }
         };
-        
+
         this.grid.getView().setStripeRows(true);
         this.grid.getView().setColumnLines(true);
         this.grid.setBorders(false);
@@ -97,7 +110,7 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
 
         GridStateHandler<M> state = new GridStateHandler<M>(this.grid);
         state.loadState();
-        
+
         VerticalLayoutContainer container = new VerticalLayoutContainer();
         container.setBorders(true);
         container.add(this.grid, new VerticalLayoutData(1, 1));
@@ -105,13 +118,12 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
         return container;
     }
 
-    public void refreshGrid(PagingLoadConfig loadConfig) {
-        this.loader.load(loadConfig);
+    public void refreshDynamicGrid() {
+        this.loader.load();
     }
 
     public Grid<M> getGrid() {
         return this.grid;
     }
 
-   
 }

@@ -12,6 +12,7 @@ import com.google.gwt.user.server.rpc.RPC;
 import com.google.gwt.user.server.rpc.RPCRequest;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.gwt.user.server.rpc.impl.LegacySerializationPolicy;
+import java.lang.reflect.Field;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +46,7 @@ public class GwtRpcController extends RemoteServiceServlet implements Controller
             RPCRequest rpcRequest = RPC.decodeRequest(payload, this.remoteServiceClass , this);
             // delegate work to the spring injected service
             onAfterRequestDeserialized(rpcRequest);
+            //return  RPC.invokeAndEncodeResponse(this.remoteService, rpcRequest.getMethod(), rpcRequest.getParameters() ,new PortalLegacySerializationPolicy());
             return  RPC.invokeAndEncodeResponse(this.remoteService, rpcRequest.getMethod(), rpcRequest.getParameters() ,rpcRequest.getSerializationPolicy());
         } catch (IncompatibleRemoteServiceException ex) {
             getServletContext().log("An IncompatibleRemoteServiceException was thrown while processing this call.", ex);
@@ -63,6 +65,11 @@ public class GwtRpcController extends RemoteServiceServlet implements Controller
     }
 
     public void setRemoteService(RemoteService remoteService) {
+        
+//           Field fDelegate = myClass.getClass().getDeclaredField("delegate");
+//        fDelegate.setAccessible(true);
+//        fDelegate.set(this,remoteService);
+        
         this.remoteService = remoteService;
         this.remoteServiceClass = this.remoteService.getClass();
     }

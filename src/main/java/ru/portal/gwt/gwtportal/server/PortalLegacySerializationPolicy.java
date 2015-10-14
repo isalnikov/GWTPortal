@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 public class PortalLegacySerializationPolicy extends SerializationPolicy implements TypeNameObfuscator {
 
-    LegacySerializationPolicy legacy = LegacySerializationPolicy.getInstance();
+   private final LegacySerializationPolicy legacy = LegacySerializationPolicy.getInstance();
 
     @Override
     public boolean shouldDeserializeFields(Class<?> clazz) {

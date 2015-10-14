@@ -140,7 +140,7 @@ public class AdminForm implements IsWidget {
             public void onSelection(SelectionEvent<TableDto>  event) {
                    TableDto select = event.getSelectedItem();
                    GWT.log(select.getClassName());
-                   tableGridView.refreshGrid(select.getClassName() , null);
+                   tableGridView.refreshGrid(select.getClassName());
             }
         });
         
