@@ -16,6 +16,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.core.client.dom.ScrollSupport;
 import com.sencha.gxt.data.client.loader.RpcProxy;
 import com.sencha.gxt.data.shared.loader.ListLoader;
 import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
@@ -65,26 +66,7 @@ public class DynamicGridView implements IsWidget{
                 RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>> proxy = new RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>>() {
                     @Override
                     public void load(PagingLoadConfig loadConfig,final AsyncCallback<PagingLoadResult<Map<String,String>>> callback) {
-                        
-                      AsyncCallback<PagingLoadResult<Map<String,String>>> asyncCallback = new AsyncCallback<PagingLoadResult<Map<String, String>>>() {
-
-                          @Override
-                          public void onFailure(Throwable caught) {
-                             callback.onFailure(caught);
-                          }
-
-                          @Override
-                          public void onSuccess(PagingLoadResult<Map<String, String>> result) {
-                             //callback.onSuccess(result);
-                              GWT.log(result.toString());
-                            // dynamicGridPanel.refreshDynamicGrid();
-                          }
-                      };
-                      
-               
                         service.fetchTableOrViewData(loadConfig, tableName, callback);
-                        
-                       
                     }
                 };
 
@@ -98,14 +80,15 @@ public class DynamicGridView implements IsWidget{
                 ColumnModel<Map<String,String>> columnModel = new ColumnModel<Map<String,String>>(l);
                 
                 dynamicGridPanel = new DynamicGrid<Map<String,String>, ColumnModel<Map<String,String>>, RpcProxy<PagingLoadConfig, PagingLoadResult<Map<String,String>>>>(columnModel, proxy);
-                SimpleContainer container = new SimpleContainer();
-                container.add(dynamicGridPanel.asWidget());
+                
+                
                 VerticalLayoutContainer layoutContainer = new VerticalLayoutContainer();
-                layoutContainer.setBorders(true);
-                layoutContainer.add(container, new VerticalLayoutData(1, 1));
+                layoutContainer.add(dynamicGridPanel.asWidget(), new VerticalLayoutData(-1, -1));
+                
                 simpleContainer.add(layoutContainer);
                 simpleContainer.unmask();
                 simpleContainer.forceLayout();
+                
             }
             
             @Override

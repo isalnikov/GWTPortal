@@ -113,7 +113,7 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
 
         VerticalLayoutContainer container = new VerticalLayoutContainer();
         container.setBorders(true);
-        container.add(this.grid, new VerticalLayoutData(1, 1));
+        container.add(this.grid, new VerticalLayoutData(-1, -1));
         container.add(toolBar, new VerticalLayoutData(1, -1));
         return container;
     }
