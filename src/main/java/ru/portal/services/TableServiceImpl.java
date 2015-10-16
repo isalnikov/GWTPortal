@@ -21,6 +21,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.portal.entity.User;
 import ru.portal.interfaces.PortalTable;
 
 @Service
@@ -77,9 +79,9 @@ public class TableServiceImpl implements TableService {
 
     @Override
     public Page<HashMap<String, String>> findAll(String tableOrViewName, Pageable pageable) {
-       
+
         List<HashMap<String, String>> result = new ArrayList<>();
-        
+
         EntityType<?> type = null;
         Set<EntityType<?>> set = em.getEntityManagerFactory().getMetamodel().getEntities();
         for (EntityType<?> entityType : set) {
@@ -92,45 +94,42 @@ public class TableServiceImpl implements TableService {
         }
 
         Long totalRows = 0L;
-        
+
         if (type != null) {
             Class<?> bindableJavaType = type.getBindableJavaType();
-          
+
             //count
             CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
             CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
             countQuery.select(criteriaBuilder.count(countQuery.from(bindableJavaType)));
-            totalRows =  em.createQuery(countQuery).getSingleResult();
+            totalRows = em.createQuery(countQuery).getSingleResult();
 
             //select
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<?> cq = cb.createQuery(bindableJavaType);
             Root<?> root = cq.from(bindableJavaType);
 //          cq.select(root);
-            if(pageable == null){
+            if (pageable == null) {
                 pageable = new PageRequest(0, 50);
             }
-            
+
             TypedQuery<?> query = em.createQuery(cq);
-            
+
             query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
             query.setMaxResults(pageable.getPageSize());
             List<?> all = query.getResultList();
-            
-            
+
             List<String> columns = getTableOrViewMetaData(tableOrViewName);
-            
-           
-            
+
             for (Object object : all) {
-                
+
                 HashMap<String, String> res = new HashMap<>(columns.size());
                 Class<? extends Object> clazz = object.getClass();
                 for (String fieldName : columns) {
                     try {
                         Field field = clazz.getDeclaredField(fieldName);
                         field.setAccessible(true);
-                        Object fieldValue =  field.get(object);
+                        Object fieldValue = field.get(object);
                         res.put(fieldName, fieldValue.toString());
                         //TODO cast data integer long etc
                     } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
@@ -140,9 +139,62 @@ public class TableServiceImpl implements TableService {
                 result.add(res);
             }
         }
-        
+
         PageImpl<HashMap<String, String>> list = new PageImpl<>(result, pageable, totalRows);
         return list;
+    }
+
+    @Override
+    public Map<EntityType<?>, Map<String, String>> findByEntityClassId(String entityClass, String id) {
+
+        try {
+            Class<?> cl = Class.forName(entityClass);
+            EntityType<?> entityType = em.getEntityManagerFactory().getMetamodel().entity(cl);
+            if (entityType != null && entityType.getBindableJavaType().getAnnotation(PortalTable.class) != null) {
+                if (entityType.getBindableJavaType().getName().equals(entityClass)) {
+                    Class<?> bindableJavaType = entityType.getBindableJavaType();
+                    //select
+
+                    CriteriaBuilder cb = em.getCriteriaBuilder();
+                    CriteriaQuery<?> cq = cb.createQuery(bindableJavaType);
+                    Root<?> root = cq.from(User.class);
+
+                    cq.where(cb.equal(root.get("id"), Long.parseLong(id)));
+
+                    TypedQuery<?> query = em.createQuery(cq);
+                    ParameterExpression<Long> parameter = cb.parameter(Long.class, "id");
+                    //query.setParameter(parameter, Long.parseLong(id));
+                    //query.unwrap(org.hibernate.Query.class).getQueryString();
+
+                    Object result = query.getSingleResult();
+
+                    List<String> columns = getTableOrViewMetaData(entityClass);
+
+                    HashMap<String, String> res = new HashMap<>(columns.size());
+                    Class<? extends Object> clazz = result.getClass();
+                    for (String fieldName : columns) {
+                        try {
+                            Field field = clazz.getDeclaredField(fieldName);
+                            field.setAccessible(true);
+                            Object fieldValue = field.get(result);
+                            res.put(fieldName, fieldValue.toString());
+                        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+                            Logger.getLogger(TableServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
+                    System.out.println(res);
+                    Map<EntityType<?>, Map<String, String>> hm = new HashMap<>();
+                    hm.put(entityType, res);
+                    return hm;
+
+                }
+            }
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(TableServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 }

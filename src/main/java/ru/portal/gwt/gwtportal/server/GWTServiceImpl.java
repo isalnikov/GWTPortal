@@ -27,11 +27,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import ru.portal.entity.Role;
 import ru.portal.entity.User;
+import ru.portal.gwt.gwtportal.client.EditorDto;
 import ru.portal.gwt.gwtportal.client.GWTService;
 import ru.portal.gwt.gwtportal.client.TableDto;
 import ru.portal.gwt.gwtportal.client.TableFieldsDto;
 import ru.portal.interfaces.PortalTable;
+import ru.portal.services.RoleService;
 import ru.portal.services.TableService;
 import ru.portal.services.UserService;
 
@@ -45,7 +48,11 @@ public class GWTServiceImpl  implements GWTService {
     @Autowired
     private TableService tableService;
     
+    @Autowired
+    private UserService userService;
     
+    @Autowired
+    private RoleService roleService;
 //    @Override
 //    public void init(ServletConfig config) throws ServletException {
 //        super.init(config);
@@ -67,6 +74,21 @@ public class GWTServiceImpl  implements GWTService {
             for (EntityType<?> entityType : set) {
                 TableDto dto = new TableDto(entityType.getBindableJavaType().getName(), entityType.getBindableJavaType().getAnnotation(PortalTable.class).title(), entityType.getBindableJavaType().getName());
                 result.add(dto);
+                
+                List<User> users = new ArrayList<>();
+                for (int i = 0; i < 150; i++) {
+                    users.add(new User("admin" + i, "admin", true));
+                }
+                userService.save(users);
+                
+                
+                List<Role> roles = new ArrayList<>();
+                for (int i = 0; i < 200; i++) {
+                    roles.add(new Role("admin" + i));
+                }
+                
+                roleService.save(roles);
+                
             }
         } else {
             for (EntityType<?> entityType : set) {
@@ -104,6 +126,23 @@ public class GWTServiceImpl  implements GWTService {
         Page<HashMap<String, String>> result = tableService.findAll(tableOrViewName, pageable);
         ArrayList<HashMap<String,String>> res = new ArrayList<>( result.getContent());
         return new PagingLoadResultBean(res, (int) result.getTotalElements(), offset);
+    }
+
+    @Override
+    public List<EditorDto> fetchById(String entityClass, String id) {
+        ArrayList<EditorDto> result = new ArrayList<>();
+        Map<EntityType<?>, Map<String, String>> hm = tableService.findByEntityClassId(entityClass,id);
+        
+      
+        Set<EntityType<?>> set = hm.keySet();
+        for (EntityType<?> entityType : set) {
+            Map<String, String> map = hm.get(entityType);
+            
+            
+            
+        }
+        
+        return result;
     }
 
 }

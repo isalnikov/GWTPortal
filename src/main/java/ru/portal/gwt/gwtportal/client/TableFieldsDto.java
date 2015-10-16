@@ -18,8 +18,8 @@ import com.sencha.gxt.data.shared.TreeStore.TreeNode;
 public class TableFieldsDto implements Serializable, TreeStore.TreeNode<TableFieldsDto> {
 
     private String id;
-    private String  name;
-    private String  className;
+    private String name;
+    private String className;
 
     protected TableFieldsDto() {
 

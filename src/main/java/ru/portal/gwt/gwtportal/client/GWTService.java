@@ -23,11 +23,13 @@ import java.util.Map;
 public interface GWTService extends RemoteService {
 
     public String myMethod(String s);
-    
-   public List<TableFieldsDto> getTableNameWithFields(TableDto tableDto);
-    
+
+    public List<TableFieldsDto> getTableNameWithFields(TableDto tableDto);
+
     public List<String> fetchTableOrViewMetaData(String tableOrViewName);
 
     public PagingLoadResult<Map<String, String>> fetchTableOrViewData(PagingLoadConfig config, String tableOrViewName);
+    
+    public List<EditorDto> fetchById(String entityClass , String id);
 
 }

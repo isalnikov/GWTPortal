@@ -97,7 +97,6 @@ public class DynamicTreeView implements IsWidget {
             });
             tree.setLoader(loader);
             tree.getStyle().setLeafIcon(PortalImages.INSTANCE.table());
-            tree.setContextMenu(null);
             tree.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
             
             
@@ -112,8 +111,13 @@ public class DynamicTreeView implements IsWidget {
         return panel;
     }
     
-    void addSelectionHandler(SelectionHandler handler) {
+    public void addSelectionHandler(SelectionHandler handler) {
          tree.getSelectionModel().addSelectionHandler(handler);
+        
+    }
+    
+    public TableFieldsDto getSelectedItem() {
+        return tree.getSelectionModel().getSelectedItem();
     }
 
 }

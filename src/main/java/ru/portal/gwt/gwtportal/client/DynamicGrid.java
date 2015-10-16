@@ -11,8 +11,10 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.GXT;
+import com.sencha.gxt.core.client.dom.ScrollSupport;
 import com.sencha.gxt.data.client.loader.RpcProxy;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
@@ -24,11 +26,15 @@ import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.state.client.CookieProvider;
 import com.sencha.gxt.state.client.GridStateHandler;
 import com.sencha.gxt.state.client.StateManager;
+import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.toolbar.PagingToolBar;
+import java.util.HashMap;
 
 /**
  *
@@ -41,6 +47,8 @@ import com.sencha.gxt.widget.core.client.toolbar.PagingToolBar;
  */
 public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<PagingLoadConfig, PagingLoadResult<M>>> implements IsWidget {
 
+    private Messages messages = GWT.create(Messages.class);
+    
     private CM columnModel;
     private P proxy;
     private Grid<M> grid;
@@ -59,23 +67,12 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
         ListStore<M> store = new ListStore<M>(new ModelKeyProvider<M>() {
             @Override
             public String getKey(M item) {
-                GWT.log(item.toString());
-                String id = null;
-                if (item != null) {
-                    // {rolename=ROLE_USER, id=2}
-                    String[] arr = item.toString().replaceAll("\\{", "").replaceAll("\\}", "").split(",");
-                    for (String string : arr) {
-                        String[] sarr = string.split("=");
-                        if (sarr[0].replaceAll(" ", "").equals("id")) {
-                            id = sarr[1];
-                            break;
-                        }
-                    }
-                }
+               HashMap<String, String> map = (HashMap<String, String>) item;
+               String id = map.get("id");
 //                if (item instanceof <YourCustomerClass>) {
 //                    return ((YourCustomerClass) item).getId();
 //                }
-                GWT.log(id);
+                //GWT.log(id);
                 return id;
             }
         });
@@ -102,19 +99,24 @@ public class DynamicGrid<M, CM extends ColumnModel<M>, P extends RpcProxy<Paging
 
         this.grid.getView().setStripeRows(true);
         this.grid.getView().setColumnLines(true);
+        this.grid.getView().setAutoFill(true);
+        this.grid.getView().setEmptyText(messages.emptyText());
         this.grid.setBorders(false);
         this.grid.setColumnReordering(true);
+        
         this.grid.setStateful(true);
         this.grid.setLoadMask(true);
-        this.grid.setStateId("gridExample");
+        this.grid.setStateId("gynamicGrid");
 
         GridStateHandler<M> state = new GridStateHandler<M>(this.grid);
         state.loadState();
 
+        
+        
         VerticalLayoutContainer container = new VerticalLayoutContainer();
-        container.setBorders(true);
-        container.add(this.grid, new VerticalLayoutData(-1, -1));
-        container.add(toolBar, new VerticalLayoutData(1, -1));
+        container.add(this.grid, new VerticalLayoutData(1, 750));
+        container.add(toolBar, new VerticalLayoutData(1,-1));
+        container.forceLayout();
         return container;
     }
 

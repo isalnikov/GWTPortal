@@ -8,8 +8,10 @@ package ru.portal.gwt.gwtportal.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.i18n.client.HasDirection;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.resources.ThemeStyles;
 import com.sencha.gxt.core.client.util.Margins;
@@ -22,7 +24,7 @@ import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuBar;
 import com.sencha.gxt.widget.core.client.menu.MenuBarItem;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
-
+import java.util.Date;
 
 /**
  * Главная форма панели администратора
@@ -34,6 +36,9 @@ public class AdminForm implements IsWidget {
     private BorderLayoutContainer container;
     private DynamicTreeView tableTreeView;
     private DynamicGridView tableGridView;
+    private DynamicEditorView dynamicEditorView;
+
+    private HTML logsHtml;
 
     public AdminForm() {
     }
@@ -42,10 +47,14 @@ public class AdminForm implements IsWidget {
     public Widget asWidget() {
         if (container == null) {
 
+            
+            
             tableTreeView = new DynamicTreeView();
             tableGridView = new DynamicGridView();
+            dynamicEditorView = new DynamicEditorView();
 
             container = new BorderLayoutContainer();
+            container.setContextMenu(null);
             container.setBorders(true);
 
             //top menu
@@ -105,10 +114,24 @@ public class AdminForm implements IsWidget {
             ContentPanel east = new ContentPanel();
 
             //
-            HTML htmlsouthr = new HTML("htmlsouthr");
-            south.add(htmlsouthr);
-            HTML htmleast = new HTML("TODO add editor row dynamic form");
-            east.add(htmleast);
+            logsHtml = new HTML("loggin...", HasDirection.Direction.LTR) {
+                @Override
+                public void setHTML(String html) {
+                    if (html != null && "clear".equals(html)) {
+                        super.setHTML(" ");
+                        return;
+                    }
+                    StringBuilder log = new StringBuilder(this.getHTML());
+                    log.append("<br/>");
+                    log.append((new Date()).toLocaleString()).append(" : ");
+                    log.append(html);
+                    super.setHTML(log.toString());
+                }
+            };
+            ScrollPanel logScrollPanel = new ScrollPanel(logsHtml);
+            south.add(logScrollPanel);
+
+            east.add(editorView());
             //
 
             container.setNorthWidget(north, northData);
@@ -116,8 +139,8 @@ public class AdminForm implements IsWidget {
             container.setCenterWidget(center, centerData);
             container.setEastWidget(east, eastData);
             container.setSouthWidget(south, southData);
-            
-           addSelectionHandlers();
+
+            addSelectionHandlers();
 
         }
 
@@ -131,18 +154,38 @@ public class AdminForm implements IsWidget {
     private IsWidget tablesGridView() {
         return tableGridView.asWidget();
     }
-
     
-    private void addSelectionHandlers(){
-        tableTreeView.addSelectionHandler(new SelectionHandler<TableDto>() {
+    private IsWidget editorView(){
+        return dynamicEditorView.asWidget();
+    }
+
+    private void addSelectionHandlers() {
+
+        tableTreeView.addSelectionHandler(new SelectionHandler<TableFieldsDto>() {
 
             @Override
-            public void onSelection(SelectionEvent<TableDto>  event) {
-                   TableDto select = event.getSelectedItem();
-                   GWT.log(select.getClassName());
-                   tableGridView.refreshGrid(select.getClassName());
+            public void onSelection(SelectionEvent<TableFieldsDto> event) {
+                TableFieldsDto select = event.getSelectedItem();
+//                GWT.log(select.getClassName());
+                 logsHtml.setHTML(select.getClassName());
+                if (TableDto.class.equals(select.getClass())) {
+                    tableGridView.refreshGrid(select.getClassName());
+                }
             }
         });
+
         
+        
+        tableGridView.addSelectionHandler(new SelectionHandler() {
+            @Override
+            public void onSelection(SelectionEvent event) {
+             //   GWT.log(event.getSelectedItem().toString());
+                logsHtml.setHTML(event.getSelectedItem().toString());
+                //TODO  взять элемент из таблицы с сгенерить форму редактирования ...
+                TableFieldsDto item = tableTreeView.getSelectedItem();
+                dynamicEditorView.refreshEditForm(item,event.getSelectedItem());
+            }
+        });
+
     }
 }

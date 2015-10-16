@@ -11,4 +11,7 @@ public interface Messages extends Constants {
     @DefaultStringValue("привет мир!")
     public String hello();
 
+    @DefaultStringValue("Пусто")
+    public String emptyText();
+
 }

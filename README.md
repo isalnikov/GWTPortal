@@ -1,4 +1,7 @@
 # GWTPortal
+
+ GWT CRUD data administration RIA library for Java web applications developed
+
 GWT 2.7.0 spring  javaconfig
 
 UPDATE 02/10/2015

@@ -39,6 +39,7 @@
             <actionName>CUSTOM-Run exploded dedug</actionName>
             <displayName>Run exploded dedug</displayName>
             <goals>
+                <goal>-Dgwt.compiler.skip=true</goal>
                 <goal>jetty:stop</goal>
                 <goal>jetty:run-exploded</goal>
             </goals>

@@ -27,6 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.portal.entity.Role;
 import ru.portal.entity.User;
+import ru.portal.gwt.gwtportal.client.EditorDto;
 
 /**
  *
@@ -105,5 +106,30 @@ public class TableServiceImplTest {
         result = tableService.findAll(tableOrViewName, pageable);
         System.out.println(result);
     }
+    
+    @Test
+    public void testfindByEntityClassId(){
+               List<User> users = new ArrayList<>();
+
+        for (int i = 0; i < 150; i++) {
+            users.add(new User("admin" + i, "admin", true));
+        }
+
+        userService.save(users);
+        
+        
+        Map<EntityType<?>, Map<String, String>> entity = tableService.findByEntityClassId(User.class.getCanonicalName(), "1");
+        System.out.println(entity);
+        
+        //EditorDto dto = new EditorDto();
+        
+        //dto.setId(entity.getName());
+        //dto.setClassType(entity.getBindableJavaType().getCanonicalName());
+        //dto.setLabelText(null);
+        
+        //System.out.println(dto);
+        
+    } 
+
 
 }

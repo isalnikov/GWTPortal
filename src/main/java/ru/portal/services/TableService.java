@@ -17,4 +17,6 @@ public interface TableService {
     public List<String> getTableOrViewMetaData(String tableOrViewName);
 
     public  Page<HashMap<String, String>> findAll(String tableOrViewName, Pageable pageable);
+
+    public Map<EntityType<?>,Map<String,String>> findByEntityClassId(String entityClass, String id);
 }
