@@ -1,8 +1,13 @@
 # GWTPortal
 
- GWT CRUD data administration RIA library for Java web applications developed
+GWTPortal CRUD data administration RIA GUI library for Java web applications developed
+GWTPortal Database management in a single page
+GWTPortal Editor data manipulation
+Supports: MySQL, PostgreSQL, Oracle  etc
+Requirements: java
+Apache License 2.0 or GPL 2
 
-GWT 2.7.0 spring  javaconfig
+GWT 2.7.0 + Spring + javaconfig
 
 UPDATE 02/10/2015
 DEBUG mode 

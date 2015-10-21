@@ -75,19 +75,19 @@ public class GWTServiceImpl  implements GWTService {
                 TableDto dto = new TableDto(entityType.getBindableJavaType().getName(), entityType.getBindableJavaType().getAnnotation(PortalTable.class).title(), entityType.getBindableJavaType().getName());
                 result.add(dto);
                 
-                List<User> users = new ArrayList<>();
-                for (int i = 0; i < 150; i++) {
-                    users.add(new User("admin" + i, "admin", true));
-                }
-                userService.save(users);
-                
-                
-                List<Role> roles = new ArrayList<>();
-                for (int i = 0; i < 200; i++) {
-                    roles.add(new Role("admin" + i));
-                }
-                
-                roleService.save(roles);
+//                List<User> users = new ArrayList<>();
+//                for (int i = 0; i < 150; i++) {
+//                    users.add(new User("admin" + i, "admin", true));
+//                }
+//                userService.save(users);
+//                
+//                
+//                List<Role> roles = new ArrayList<>();
+//                for (int i = 0; i < 200; i++) {
+//                    roles.add(new Role("admin" + i));
+//                }
+//                
+//                roleService.save(roles);
                 
             }
         } else {
@@ -133,7 +133,6 @@ public class GWTServiceImpl  implements GWTService {
         ArrayList<EditorDto> result = new ArrayList<>();
         Map<EntityType<?>, Map<String, String>> hm = tableService.findByEntityClassId(entityClass,id);
         
-      
         Set<EntityType<?>> set = hm.keySet();
         for (EntityType<?> entityType : set) {
             Map<String, String> map = hm.get(entityType);

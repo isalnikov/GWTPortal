@@ -143,7 +143,12 @@ public class TableServiceImpl implements TableService {
         PageImpl<HashMap<String, String>> list = new PageImpl<>(result, pageable, totalRows);
         return list;
     }
-
+/**
+ * TODO  вернуть коллекцию ManyToMany
+ * @param entityClass
+ * @param id
+ * @return 
+ */
     @Override
     public Map<EntityType<?>, Map<String, String>> findByEntityClassId(String entityClass, String id) {
 
