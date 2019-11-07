@@ -33,7 +33,7 @@
         <gwtVersion>2.7.0</gwtVersion>
         <hsqldb.version>2.3.3</hsqldb.version>
         <slf4jVersion>1.7.12</slf4jVersion>
-        <jackson.version>2.6.1</jackson.version>
+        <jackson.version>[2.9.10.1,)</jackson.version>
     </properties>
     
     
